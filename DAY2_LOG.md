@@ -7,7 +7,7 @@
 - [Done] Ten synthetic policy documents and manifest created and source-checked.
 - [Done] FastAPI baseline with BM25 retrieval, `/api/health`, `/api/ask`, server-side model call, citations, trace JSONL, and bounded no-key response.
 - [Done] Tests added for health and manifest passage resolution.
-- [Pending] Six manual smoke responses and screenshot require running the app with the local key.
+- [Done with QA evidence] Six manual smoke questions were run against `http://127.0.0.1:8000`; raw records are in `traces/requests.jsonl`. S1, S2, S3, and S5 answered; S4 clarified; S6 abstained. S3's raw answer omitted the manager-approval condition, so it remains recorded as a known model-quality failure.
 
 ## Connectivity proof
 
@@ -18,5 +18,5 @@
 
 ## Known failures and next action
 
-The model call cannot be proved from this environment without a user-owned API key. Copy `.env.example` to `.env`, add the key locally, run `connectivity_check.py`, start Uvicorn, and save the six raw JSON responses under `smoke_results/`. Do not replace a failed response with a fabricated pass.
+The baseline is runnable and the live Groq call succeeded. S3 needs prompt/model-quality follow-up to consistently include the manager-approval condition; the raw response was not edited away. The API key must remain only in ignored `.env`; `.env.example` contains a placeholder. Do not replace a failed response with a fabricated pass.
 
