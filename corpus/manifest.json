@@ -1,0 +1,13 @@
+{"documents":[
+{"filename":"learning_leave_current.json","version":"2026.1","effective_start":"2026-01-01","effective_end":null,"status":"current","scope":"all full-time employees; learning leave","passage_ids":["LEAVE-2026-P1"]},
+{"filename":"learning_leave_archived.json","version":"2025.1","effective_start":"2025-01-01","effective_end":"2025-12-31","status":"archived","scope":"eligible employees; learning leave","passage_ids":["LEAVE-2025-P1"]},
+{"filename":"travel_expenses_current.json","version":"2026.1","effective_start":"2026-01-01","effective_end":null,"status":"current","scope":"approved business travel; meals","passage_ids":["EXPENSE-2026-P1"]},
+{"filename":"travel_expense_faq.json","version":"2026.1","effective_start":"2026-01-01","effective_end":null,"status":"current-faq","scope":"travel expense examples","passage_ids":["EXPENSE-FAQ-P1"]},
+{"filename":"remote_current.json","version":"2026.1","effective_start":"2026-01-01","effective_end":null,"status":"current","scope":"eligible employees; general remote work","passage_ids":["REMOTE-2026-P1"]},
+{"filename":"equipment_current.json","version":"2026.1","effective_start":"2026-01-01","effective_end":null,"status":"current","scope":"standard work equipment","passage_ids":["EQUIP-2026-P1"]},
+{"filename":"onboarding_current.json","version":"2026.1","effective_start":"2026-01-01","effective_end":null,"status":"current","scope":"new employees; security training","passage_ids":["ONBOARD-2026-P1"]},
+{"filename":"authority_register.json","version":"2026.1","effective_start":"2026-01-01","effective_end":null,"status":"current","scope":"policy precedence","passage_ids":["AUTH-2026-P1"]},
+{"filename":"support_operations_exception.json","version":"2026.1","effective_start":"2026-03-01","effective_end":null,"status":"current-exception","scope":"Support Operations; remote work","passage_ids":["REMOTE-SUPPORT-2026-P1"]},
+{"filename":"internal_webinar.json","version":"2026.1","effective_start":"2026-01-01","effective_end":null,"status":"current-announcement","scope":"fictional internal webinar; no entitlement","passage_ids":["WEBINAR-2026-P1"]}
+]}
+
