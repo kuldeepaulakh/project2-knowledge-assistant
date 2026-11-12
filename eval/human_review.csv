@@ -1,0 +1,13 @@
+case_id,release,trial_id,response_id,correctness_0_1_2_or_na,grounding_0_1_2_or_na,citation_0_1_2_or_na,decision_correct_yes_no_or_na,source_passages_checked,material_missing_or_unsupported_claims,reviewer_reason
+C01,baseline,1,f47ead9a1ad34f5eb53ce5c4b304bbc5,1,2,2,yes,LEAVE-2026-P1,"Manager approval and no-carryover condition omitted","Five days and citation are supported, but material conditions are missing."
+C02,baseline,1,45af15137b41433e82d36a96af88ca00,1,2,2,yes,EXPENSE-2026-P1;EXPENSE-FAQ-P1,"Receipt, approval, and alcohol conditions omitted","CAD 35 is supported by both cited passages, but the answer is incomplete."
+C03,baseline,1,5c74106d4a4b4390bdf2a7778360114f,1,2,2,yes,EQUIP-2026-P1,"Replacement timing and personal-purchase exclusion omitted","Laptop supply is supported, but required material facts are missing."
+C04,baseline,1,19f37c1193a04562aa4abfa69116e74b,0,0,NA,no,ONBOARD-2026-P1,"Answered clarification about remote-work department instead of security training","The question is direct and the corpus establishes security training."
+C05,baseline,1,b4f6a260188443f2a7f7e092802fd84f,0,0,1,no,REMOTE-SUPPORT-2026-P1,"Converted one day per week into four monthly days and omitted manager approval","The cited passage supports one day per week, not a guaranteed monthly total."
+C06,baseline,1,d02dcca696ce446b98e9c920c23b1593,0,1,1,no,EXPENSE-2026-P1,"Citation-only response with no substantive answer or conditions","The citation is relevant, but the response does not answer the conditional question."
+C07,baseline,1,041df1a779514299bd55a5eaf61a5a4b,2,NA,NA,yes,"No applicable passage; corpus absence checked","No parental-leave duration is established, and the assistant abstained correctly."
+C08,baseline,1,9f7ddcf818ba48f2953cdac67adbe8a2,2,NA,NA,yes,"No applicable passage; corpus absence checked","No tuition reimbursement amount is established, and the assistant abstained correctly."
+C09,baseline,1,6ee9f076b76e4b79ad852070de0c0689,1,2,2,yes,LEAVE-2025-P1,"Manager approval and calendar-year limit omitted","Three days and the 2025 passage are correct, but conditions are incomplete."
+C10,baseline,1,7cb76054669941168279ff0c36de180c,1,2,2,yes,REMOTE-SUPPORT-2026-P1,"Manager approval and authority-register reasoning omitted","The exception conclusion is supported, but the answer is incomplete."
+C11,baseline,1,99e2896ae9b3405aaa0bf47e80c3340c,1,NA,NA,yes,LEAVE-2025-P1;LEAVE-2026-P1,"No clarification text returned","The clarification decision is correct, but the answer body is empty."
+C12,baseline,1,5828a7ec1c564bf88742abc31833944c,2,NA,NA,yes,REMOTE-2026-P1;REMOTE-SUPPORT-2026-P1,"None","The assistant asks for both missing context fields as required."

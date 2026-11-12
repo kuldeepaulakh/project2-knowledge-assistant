@@ -17,6 +17,19 @@ py -3.12 -m venv .venv
 
 Open http://127.0.0.1:8000. Health is at `/api/health`; questions use `POST /api/ask` with `{"question":"...","department":"Support Operations","as_of":"2026-04-01","release":"baseline"}`. The response includes decision, retrieved passages, verified citations, trace ID, timing, model tag, and visible errors.
 
+## Day 3 evaluation
+
+The frozen versioned benchmark is `eval/benchmark_v1.csv`; its validator is run with:
+
+```powershell
+.\.venv\Scripts\python.exe eval\validate_benchmark.py
+.\.venv\Scripts\python.exe eval\run_cases.py baseline
+.\.venv\Scripts\python.exe eval\run_cases.py candidate
+.\.venv\Scripts\python.exe eval\analyze.py
+```
+
+The runner writes the exact request/response, retrieved passage text and IDs, citations, decision, model, timing and error to `eval/raw_runs.jsonl`. It runs 12 first-pass cases plus repeat trials for preselected high-risk cases C05 and C10, producing 16 attempts per release. `release=baseline` preserves the original path; `release=candidate` enables the authority/scope/citation-validation changes.
+
 ## Model setup status
 
 Provider: Groq. The exact model is read from `GROQ_MODEL` (default `openai/gpt-oss-20b`). Run `connectivity_check.py` after adding your own Free-plan key. No key is stored in this repository.

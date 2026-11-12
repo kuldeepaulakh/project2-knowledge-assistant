@@ -1,0 +1,15 @@
+{
+  "status": "valid",
+  "version": "v1",
+  "cases": 12,
+  "category_counts": {
+    "direct": 4,
+    "conditional/multi-document": 2,
+    "unknown": 2,
+    "outdated/conflicting": 2,
+    "ambiguous": 2
+  },
+  "development": 8,
+  "held_out": 4,
+  "valid_manifest_ids": 10
+}

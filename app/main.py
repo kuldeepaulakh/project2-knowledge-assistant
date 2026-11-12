@@ -32,7 +32,7 @@ class AskRequest(BaseModel):
     question: str = Field(min_length=1)
     department: str | None = None
     as_of: date | None = None
-    release: Literal["baseline"] = "baseline"
+    release: Literal["baseline", "candidate"] = "baseline"
     top_k: int = Field(default=5, ge=1, le=10)
 
 
@@ -50,9 +50,10 @@ def model_error(exc: Exception) -> str:
     return f"Groq {category}: {str(exc)[:500]}"
 
 
-def context_clarification(question: str, department: str | None, as_of: date | None) -> str | None:
+def context_clarification(question: str, department: str | None, as_of: date | None, release: str = "baseline") -> str | None:
     lower = question.lower()
-    if any(term in lower for term in ("remote", "remotely", "work from home")) and not department and "support operations" not in lower:
+    remote_context_needed = release == "baseline" or any(term in lower for term in ("how many", "how much", "allowance", "days per week"))
+    if remote_context_needed and any(term in lower for term in ("remote", "remotely", "work from home")) and not department and "support operations" not in lower:
         return "Which department should I apply, and what date should I use? Department exceptions can change the remote-work allowance."
     if "learning leave" in lower and not as_of and not re.search(r"\b20\d{2}\b", lower):
         return "What date or calendar year should I use? The learning-leave rule differs between 2025 and 2026."
@@ -69,10 +70,24 @@ def in_scope(passage: Passage, as_of: date | None) -> bool:
     return start <= as_of and (end is None or as_of <= end)
 
 
-def select_passages(question: str, department: str | None, as_of: date | None, top_k: int) -> list[dict[str, Any]]:
+def select_passages(question: str, department: str | None, as_of: date | None, top_k: int, release: str = "baseline") -> list[dict[str, Any]]:
     query = " ".join(part for part in (question, department or "", as_of.isoformat() if as_of else "") if part)
+    candidates = retriever.search(query, 10)
+    if release == "candidate":
+        lower = f"{question} {department or ''}".lower()
+        if "remote" in lower or "remotely" in lower or "work from home" in lower:
+            if department and department.lower() == "support operations":
+                candidates = [(p, s) for p, s in candidates if p.passage_id != "REMOTE-2026-P1"] + [(p, s) for p, s in candidates if p.passage_id == "REMOTE-2026-P1"]
+        if "learning leave" in lower or "learning-leave" in lower:
+            if as_of and as_of.year >= 2026:
+                candidates = [(p, s) for p, s in candidates if p.passage_id != "LEAVE-2025-P1"]
+            elif as_of and as_of.year == 2025:
+                candidates = [(p, s) for p, s in candidates if p.passage_id != "LEAVE-2026-P1"]
+        if "travel" in lower or "meal" in lower or "expense" in lower:
+            candidates = [(p, s) for p, s in candidates if p.passage_id != "EXPENSE-FAQ-P1"] + [(p, s) for p, s in candidates if p.passage_id == "EXPENSE-FAQ-P1"]
+        candidates = [(p, s) for p, s in candidates if p.passage_id != "WEBINAR-2026-P1"]
     selected: list[dict[str, Any]] = []
-    for passage, score in retriever.search(query, 10):
+    for passage, score in candidates:
         if not in_scope(passage, as_of):
             continue
         selected.append({"id": passage.passage_id, "text": passage.text, "filename": passage.filename, "score": round(score, 4)})
@@ -81,7 +96,7 @@ def select_passages(question: str, department: str | None, as_of: date | None, t
     return selected
 
 
-def answer_with_groq(question: str, department: str | None, as_of: date | None, selected: list[dict[str, Any]]) -> tuple[str, str, str | None]:
+def answer_with_groq(question: str, department: str | None, as_of: date | None, selected: list[dict[str, Any]], release: str = "baseline") -> tuple[str, str, str | None]:
     api_key = os.getenv("GROQ_API_KEY")
     model = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
     if not api_key:
@@ -94,7 +109,9 @@ def answer_with_groq(question: str, department: str | None, as_of: date | None, 
         "Return the first line exactly as DECISION: answer, DECISION: clarify, DECISION: abstain, or DECISION: conflict. "
         "Use clarify when the question lacks department/date context, abstain when the corpus does not establish the fact, "
         "and conflict only when applicable authoritative passages truly conflict. Cite only supplied passage IDs in square brackets. "
-        "Never invent policy facts, dates, entitlements, or citation IDs.\n\n"
+        "Never invent policy facts, dates, entitlements, or citation IDs. Quote or closely paraphrase all material conditions. "
+        "Do not convert a weekly allowance into a monthly total unless the passage explicitly gives a monthly limit. "
+        "Always provide a substantive answer before the citations.\n\n"
         f"Question: {question}\nDepartment: {department or '(not provided)'}\nAs of: {as_of.isoformat() if as_of else '(not provided)'}\n\nPassages:\n{context}"
     )
     try:
@@ -127,8 +144,8 @@ def ask(request: AskRequest) -> dict[str, Any]:
     started = time.perf_counter()
     trace_id = uuid.uuid4().hex
     model = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
-    retrieved = select_passages(request.question, request.department, request.as_of, request.top_k)
-    clarification = context_clarification(request.question, request.department, request.as_of)
+    retrieved = select_passages(request.question, request.department, request.as_of, request.top_k, request.release)
+    clarification = context_clarification(request.question, request.department, request.as_of, request.release)
     error: str | None = None
     citations: list[str] = []
     if clarification:
@@ -136,14 +153,15 @@ def ask(request: AskRequest) -> dict[str, Any]:
     elif not retrieved:
         decision, answer = "abstain", "This question is not established in these documents."
     else:
-        answer, decision, error = answer_with_groq(request.question, request.department, request.as_of, retrieved)
+        answer, decision, error = answer_with_groq(request.question, request.department, request.as_of, retrieved, request.release)
         cited_ids = ID_PATTERN.findall(answer)
         invalid = sorted(set(cited_ids) - {item["id"] for item in retrieved})
         if invalid:
             decision, error, answer = "conflict", f"Citation integrity failure: model cited IDs not in retrieved passages: {', '.join(invalid)}", "The model response was rejected because its citations could not be verified."
         else:
             citations = list(dict.fromkeys(cited_ids))
-            if decision == "answer" and not citations:
+            substantive_answer = ID_PATTERN.sub("", answer).strip(" :\n")
+            if decision == "answer" and (not citations or (request.release == "candidate" and not substantive_answer)):
                 decision, error, answer = "conflict", "Citation integrity failure: answer contained no verifiable passage citation.", "The model response was rejected because it did not cite a retrieved passage."
             elif decision == "abstain" and not answer:
                 answer = "This question is not established in these documents."

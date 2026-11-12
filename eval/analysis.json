@@ -1,0 +1,81 @@
+{
+  "attempts_total": 32,
+  "attempts_by_release": {
+    "baseline": 16,
+    "candidate": 16
+  },
+  "first_pass": {
+    "baseline": {
+      "first_pass_attempted": 12,
+      "errors": 0,
+      "valid_citation_records": 12,
+      "evidence_hit_at_5": 10,
+      "expected_decision_matches": 11
+    },
+    "candidate": {
+      "first_pass_attempted": 12,
+      "errors": 1,
+      "valid_citation_records": 12,
+      "evidence_hit_at_5": 10,
+      "expected_decision_matches": 11
+    }
+  },
+  "baseline_candidate_differences": [
+    {
+      "case_id": "C01",
+      "baseline_decision": "answer",
+      "candidate_decision": "answer",
+      "baseline_answer": "5 working days [LEAVE-2026-P1]",
+      "candidate_answer": "You are eligible for five working days of learning leave in 2026. [LEAVE-2026-P1]"
+    },
+    {
+      "case_id": "C02",
+      "baseline_decision": "answer",
+      "candidate_decision": "answer",
+      "baseline_answer": "The meal limit on approved business travel is CAD 35 per day. [EXPENSE-2026-P1][EXPENSE-FAQ-P1]",
+      "candidate_answer": "The meal limit on approved business travel is CAD 35 per day. [EXPENSE-2026-P1]"
+    },
+    {
+      "case_id": "C04",
+      "baseline_decision": "clarify",
+      "candidate_decision": "answer",
+      "baseline_answer": "Which department should I apply, and what date should I use? Department exceptions can change the remote-work allowance.",
+      "candidate_answer": "New employees must complete security training before receiving remote‑work approval. [ONBOARD-2026-P1]"
+    },
+    {
+      "case_id": "C05",
+      "baseline_decision": "answer",
+      "candidate_decision": "answer",
+      "baseline_answer": "4 days [REMOTE-SUPPORT-2026-P1]",
+      "candidate_answer": "You may work remotely up to one day per week, so in April 2026 you can take up to four remote days (subject to manager approval). [REMOTE-SUPPORT-2026-P1]"
+    },
+    {
+      "case_id": "C06",
+      "baseline_decision": "answer",
+      "candidate_decision": "answer",
+      "baseline_answer": "[EXPENSE-2026-P1]",
+      "candidate_answer": "Yes, you can claim CAD 35 per day for meals on approved business travel, provided you submit the receipt within 30 calendar days after the expense. [EXPENSE-2026-P1]"
+    },
+    {
+      "case_id": "C09",
+      "baseline_decision": "answer",
+      "candidate_decision": "answer",
+      "baseline_answer": "Three working days [LEAVE-2025-P1]",
+      "candidate_answer": "Three working days of learning leave were allowed in 2025. [LEAVE-2025-P1]"
+    },
+    {
+      "case_id": "C10",
+      "baseline_decision": "answer",
+      "candidate_decision": "conflict",
+      "baseline_answer": ", Use the one‑day per week exception for Support Operations as outlined in [REMOTE-SUPPORT-2026-P1].",
+      "candidate_answer": "The model response was rejected because it did not cite a retrieved passage."
+    },
+    {
+      "case_id": "C11",
+      "baseline_decision": "clarify",
+      "candidate_decision": "clarify",
+      "baseline_answer": "",
+      "candidate_answer": "I need to know the relevant date or department to determine how many learning‑leave days you are entitled to.  \n[LEAVE-2025-P1] [LEAVE-2026-P1]"
+    }
+  ]
+}
