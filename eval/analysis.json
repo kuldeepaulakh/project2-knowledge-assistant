@@ -1,4 +1,6 @@
 {
+  "retrieval_k": 5,
+  "retrieval_hit_denominator": 12,
   "attempts_total": 32,
   "attempts_by_release": {
     "baseline": 16,

@@ -1,9 +1,13 @@
-# Day 3 release recommendation
+# Day 3–4 release recommendation
 
-## Conditional go for candidate evaluation
+## Conditional go for evaluation/demo; no-go for production policy use
 
-The corpus, validator, app, tests, benchmark and 32 raw attempts are present. Baseline and candidate remain selectable through `release=baseline|candidate`. The candidate improved the false clarification in C04 and citation-only output in C06, while preserving bounded unknown handling.
+The frozen validator is valid, all 12 baseline and 12 candidate first-pass outputs were human-reviewed, and the full 32-attempt raw run set is present. The configured retrieval value is `k=5`; both releases hit at least one applicable passage in 10/12 cases (83.3%). Candidate decision matching is 11/12 with one explicit citation-integrity error.
 
-This is not a production-ready release. C05 still converts a weekly Support Operations rule into a monthly total in the candidate run, and C10 exposed a citation-integrity rejection. Human review and Day 4 investigation are required before any stronger recommendation.
+Candidate improvements are real: C04 now answers the security-training question, C06 now provides substantive content instead of a citation-only response, and C11 now explains its clarification. The candidate also preserves bounded abstention for unknown C07/C08.
+
+The release is not production-ready. C05 still converts a weekly Support Operations rule into a guaranteed four-day April total, and C10 is rejected because the model supplied no verifiable citation. Several otherwise grounded answers still omit material conditions such as approval, receipt, alcohol, or carryover rules.
+
+Decision: use the candidate for classroom demonstration and continued investigation, but do not use it for employee policy decisions until the C05 generation/grounding issue and C10 citation-recovery path are fixed and re-reviewed.
 
 Evidence: `eval/raw_runs.jsonl`, `eval/analysis.json`, `eval/human_review.csv`, and findings F01–F03. The app uses only fictional passages and the API key remains local in ignored `.env`.
